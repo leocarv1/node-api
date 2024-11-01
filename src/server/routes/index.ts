@@ -3,9 +3,6 @@ import { Router } from 'express';
 
 import { CityController, ProductsController } from '../controllers'
 
-// Middlewares
-import { createQueryValidator } from '../middlewares/filterValidator';
-
 const router = Router();
 
 // router.all("/", createQueryValidator);
