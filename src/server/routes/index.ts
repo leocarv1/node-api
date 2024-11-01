@@ -8,6 +8,7 @@ const router = Router();
 // router.all("/", createQueryValidator);
 
 // Cities
+router.get('/cities',CityController.getAllValidation, CityController.getAll);
 router.post('/cities', CityController.createValidation, CityController.create);
 
 // Products
