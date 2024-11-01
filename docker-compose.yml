@@ -1,0 +1,13 @@
+# Arquivo que contém quais serviços a minha aplicação precisa
+version: "3"
+
+services:
+  app:
+    # Comando para buildar o docker. Onde está o dockerfile
+    build: .
+    command: npm start
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - .:/usr/app
