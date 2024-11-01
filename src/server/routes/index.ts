@@ -9,6 +9,7 @@ const router = Router();
 
 // Cities
 router.get('/cities',CityController.getAllValidation, CityController.getAll);
+router.get('/cities/:id',CityController.getByIdValidation, CityController.getById);
 router.post('/cities', CityController.createValidation, CityController.create);
 
 // Products
