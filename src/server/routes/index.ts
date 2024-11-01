@@ -11,9 +11,10 @@ const router = Router();
 router.get('/cities',CityController.getAllValidation, CityController.getAll);
 router.get('/cities/:id',CityController.getByIdValidation, CityController.getById);
 router.post('/cities', CityController.createValidation, CityController.create);
+router.put('/cities/:id', CityController.updateByIdIdValidation, CityController.updateById);
 
 // Products
 router.post('/products', ProductsController.create);
 
 
-export { router }
+export { router };
