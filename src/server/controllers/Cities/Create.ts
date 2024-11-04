@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
 import { validation } from '../../shared/middlewares';
@@ -22,5 +23,5 @@ export const createValidation = validation((getSchema) => ({
 export const create = async (req: Request<{}, {}, ICidade>, res: Response) => {
     console.log(req.body);
     
-    return res.status(500).send('Não implementado!');
+    return res.status(StatusCodes.CREATED).json(1);
 };
