@@ -2,7 +2,7 @@
   "name": "api-rest-node-typescript",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Lucas Souza",
+  "author": "Leonardo Carvalho",
   "license": "MIT",
   "private": false,
   "scripts": {
