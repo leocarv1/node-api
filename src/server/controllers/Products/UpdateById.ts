@@ -9,21 +9,27 @@ interface IParamsProps {
     id?: number;
 }
 
-export const getByIdValidation = validation((getSchema) => ({
+interface IBodyProps {
+    name: string
+    categories: number[]
+}
+
+export const updateByIdIdValidation = validation((getSchema) => ({
+    body: getSchema<IBodyProps>(yup.object().shape({
+        name: yup.string().required().min(3),
+        categories: yup.array().of(yup.number().required()).required()
+    })),
     params: getSchema<IParamsProps>(yup.object().shape({
         id: yup.number().integer().required().moreThan(0)
     })),
 }));
 
-export const getById = async (req: Request<IParamsProps>, res: Response) => {
+export const updateById = async (req: Request<IParamsProps>, res: Response) => {
     if (Number(req.params.id) === 99999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         errors: {
             default: 'Registro não encontrado'
         }
     });
     
-    return res.status(StatusCodes.OK).json({
-        id: req.params.id,
-        name: 'Testing',
-    });
+    return res.status(StatusCodes.NO_CONTENT).send();
 };

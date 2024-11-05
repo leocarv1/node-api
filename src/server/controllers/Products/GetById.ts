@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-import { Request, Response } from 'express';
+import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
@@ -12,18 +11,18 @@ interface IParamsProps {
 export const getByIdValidation = validation((getSchema) => ({
     params: getSchema<IParamsProps>(yup.object().shape({
         id: yup.number().integer().required().moreThan(0)
-    })),
+    }))
 }));
 
 export const getById = async (req: Request<IParamsProps>, res: Response) => {
+    // Testing
     if (Number(req.params.id) === 99999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         errors: {
             default: 'Registro não encontrado'
         }
     });
-    
+
     return res.status(StatusCodes.OK).json({
         id: req.params.id,
-        name: 'Testing',
-    });
-};
+    })
+}
