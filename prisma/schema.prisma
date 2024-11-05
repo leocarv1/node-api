@@ -9,15 +9,25 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model City {
-  id    Int     @id @default(autoincrement())
-  name  String
+  id          Int     @id @default(autoincrement())
+  name        String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
   @@map("cities")
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("products")
 }
