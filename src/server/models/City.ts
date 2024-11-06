@@ -1,19 +1,11 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import connect from '../database';
 
-interface CityAttributes {
-    id: number;
-    name: string;
-}
+import { ICity } from '../interfaces/ICity';
 
-export interface ICity {
-    name: string,
-    state: string
-}
+type CityCreationAttributes = Optional<ICity, 'id'>
 
-type CityCreationAttributes = Optional<CityAttributes, 'id'>
-
-class City extends Model<CityAttributes, CityCreationAttributes> implements CityAttributes {
+class City extends Model<ICity, CityCreationAttributes> implements ICity {
     public id!: number;
     public name!: string;
 }

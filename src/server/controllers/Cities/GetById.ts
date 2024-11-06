@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
 import { validation } from '../../shared/middlewares';
+import City from '../../models/City';
 
 interface IParamsProps {
     id?: number;
@@ -16,14 +16,12 @@ export const getByIdValidation = validation((getSchema) => ({
 }));
 
 export const getById = async (req: Request<IParamsProps>, res: Response) => {
-    if (Number(req.params.id) === 99999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        errors: {
-            default: 'Registro não encontrado'
-        }
-    });
-    
-    return res.status(StatusCodes.OK).json({
-        id: req.params.id,
-        name: 'Testing',
-    });
+    try {
+        const city = await City.findByPk(req.params.id)
+
+        return res.status(StatusCodes.OK).json(city);
+    } catch (err) {
+        console.log(err);
+        return res.status(StatusCodes.BAD_REQUEST).json({msg: `City not found`});
+    }
 };
