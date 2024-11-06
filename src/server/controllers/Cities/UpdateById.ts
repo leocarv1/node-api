@@ -5,13 +5,15 @@ import * as yup from 'yup';
 
 import { validation } from '../../shared/middlewares';
 
+// Models
+import City from '../../models/City';
+import { ICity } from '../../interfaces/ICity';
+
 interface IParamsProps {
     id?: number;
 }
 
-interface IBodyProps {
-    name: string
-}
+interface IBodyProps extends Omit<ICity, 'id'> {}
 
 export const updateByIdIdValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
@@ -23,11 +25,14 @@ export const updateByIdIdValidation = validation((getSchema) => ({
 }));
 
 export const updateById = async (req: Request<IParamsProps>, res: Response) => {
-    if (Number(req.params.id) === 99999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        errors: {
-            default: 'Registro não encontrado'
-        }
-    });
-    
-    return res.status(StatusCodes.NO_CONTENT).send();
+    const city = await City.findByPk(req.params.id);
+
+    if (city) {
+        city.update({
+            name: req.body.name
+        });
+        return res.status(StatusCodes.OK).json({msg: "City updated succefully!"})
+    } else {
+        return res.status(StatusCodes.BAD_REQUEST).json({msg: `City not found`})
+    }
 };

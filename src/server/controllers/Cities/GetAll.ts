@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
 import { validation } from '../../shared/middlewares';
+import City from '../../models/City';
 
 interface IQueryProps {
     page?: number;
@@ -20,13 +21,11 @@ export const getAllValidation = validation((getSchema) => ({
 }));
 
 export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
-    res.setHeader('access-control-expose-headers', 'x-total-count');
-    res.setHeader('x-total-count', 1);
-    
-    return res.status(StatusCodes.OK).json([
-        {
-            id: 1,
-            nome: 'Testing',
-        }
-    ]);
+    try {
+        const cities = await City.findAll();
+        return res.status(StatusCodes.OK).json(cities);
+    } catch (err) {
+        console.log(err)
+        return res.status(StatusCodes.BAD_REQUEST).json({msg: `Error to get all cities`})
+    }
 };

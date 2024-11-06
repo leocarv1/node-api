@@ -5,14 +5,17 @@ import * as yup from 'yup';
 
 import { validation } from '../../shared/middlewares';
 
-interface ICidade {
-    name: string;
-}
+// Model
+import City from '../../models/City';
+import { ICity } from '../../interfaces/ICity';
+
+interface IBodyProps extends Omit<ICity, 'id'> {}
+
 interface IFilter {
     filter?: string;
 }
 export const createValidation = validation((getSchema) => ({
-    body: getSchema<ICidade>(yup.object().shape({
+    body: getSchema<IBodyProps>(yup.object().shape({
         name: yup.string().required().min(3),
     })),
     query: getSchema<IFilter>(yup.object().shape({
@@ -20,6 +23,11 @@ export const createValidation = validation((getSchema) => ({
     })),
 }));
 
-export const create = async (req: Request<{}, {}, ICidade>, res: Response) => {    
-    return res.status(StatusCodes.CREATED).json(1);
+export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) => {  
+    
+    const city = await City.create({
+        name: req.body.name
+    });
+
+    return res.status(StatusCodes.CREATED).json(city);
 };

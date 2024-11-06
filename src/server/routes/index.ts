@@ -1,8 +1,9 @@
 import { Router } from 'express';
 // import { StatusCodes } from 'http-status-codes';
 
-// Controller
-import { CityController, ProductsController } from '../controllers'
+// Controllers
+import { ProductsController } from '../controllers'
+import { CityController } from '../controllers/Cities/CityController';
 
 const router = Router();
 

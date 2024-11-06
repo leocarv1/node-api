@@ -4,6 +4,9 @@ import 'dotenv/config'
 import './shared/services/translations'
 import { router } from './routes'
 
+// Banco de Dados
+import '../server/database/index'
+
 const server = express();
 
 server.use(express.json())

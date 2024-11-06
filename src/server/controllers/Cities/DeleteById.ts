@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
+
 import { validation } from '../../shared/middlewares';
+import City from '../../models/City';
 
 interface IParamsProps {
     id?: number;
@@ -21,6 +23,13 @@ export const deleteById = async (req: Request<IParamsProps>, res: Response) => {
             default: 'Registro não encontrado'
         }
     });
-    
-    return res.status(StatusCodes.NO_CONTENT).send();
+
+    const city = await City.findByPk(req.params.id);
+
+    if (city) {
+        await city.destroy()
+        return res.status(StatusCodes.OK).json({msg: "City deleted!"})
+    } else {
+        return res.status(StatusCodes.BAD_REQUEST).json({msg: "City not found!"})
+    }
 };
