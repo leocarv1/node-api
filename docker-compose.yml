@@ -1,13 +1,28 @@
-# Arquivo que contém quais serviços a minha aplicação precisa
 version: "3"
 
 services:
   app:
-    # Comando para buildar o docker. Onde está o dockerfile
     build: .
     command: npm start
     ports:
       - "3000:3000"
-
+    environment:
+      - DB_USER=leocarv
+      - DB_PASS=
+      - DB_NAME=api_node
+      - DB_HOST=db
+      - JWT_SECRET=AKSGDIAYSGDIASBD
     volumes:
       - .:/usr/app
+    container_name: api_node
+    restart: always
+    depends_on:
+      - db
+
+  db:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASS=
+    restart: always
