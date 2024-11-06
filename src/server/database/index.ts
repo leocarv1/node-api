@@ -1,14 +1,17 @@
 import { Sequelize } from 'sequelize';
-import { configDev, configPrd } from '../config/dbconfig'
+// import { configDev, configPrd } from '../config/dbconfig.ts'
+import Database from '../config/dbconfig'
 
 require("dotenv").config();
 
 let connect: Sequelize;
 
+const db = new Database();
+
 if (process.env.NODE_ENV === 'production') {
-    connect = new Sequelize(configPrd);
+    connect = new Sequelize(db.configPrd);
 } else if (process.env.NODE_ENV === 'development') {
-    connect = new Sequelize(configDev);
+    connect = new Sequelize(db.configDev);
 } else {
     throw new Error('NODE_ENV não está definido corretamente. Use "production" ou "development".');
 }
