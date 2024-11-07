@@ -3,7 +3,8 @@ import { Router } from 'express';
 
 // Controllers
 import { ProductsController } from '../controllers'
-import { CityController } from '../controllers/Cities/CityController';
+import { CityController } from '../controllers/CityController';
+import { UserController } from '../controllers/UserController';
 
 const router = Router();
 
@@ -13,6 +14,13 @@ router.get('/cities/:id', CityController.getByIdValidation, CityController.getBy
 router.post('/cities', CityController.createValidation, CityController.create);
 router.put('/cities/:id', CityController.updateByIdIdValidation, CityController.updateById);
 router.delete('/cities/:id', CityController.deleteByIdIdValidation, CityController.deleteById);
+
+// User
+router.get('/users', UserController.getAllValidation, UserController.getAll);
+router.get('/users/:id', UserController.getByIdValidation, UserController.getById);
+router.post('/users', UserController.createValidation, UserController.create);
+router.put('/users/:id', UserController.updateByIdIdValidation, UserController.updateById);
+router.delete('/users/:id', UserController.deleteByIdIdValidation, UserController.deleteById);
 
 // Products
 router.get('/products', ProductsController.getAllValidation, ProductsController.getAll);
