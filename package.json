@@ -21,7 +21,8 @@
     "mysql2": "^3.11.4",
     "sequelize": "^6.37.5",
     "yup": "^1.4.0",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "@types/express": "^4.17.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
