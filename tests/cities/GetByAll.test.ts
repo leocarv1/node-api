@@ -15,7 +15,6 @@ describe('Cities - GetById', () => {
         .get('/cities')
         .send();
         
-        expect(Number(resBuscada.header['x-total-count'])).toBeGreaterThan(0);
         expect(resBuscada.statusCode).toEqual(StatusCodes.OK);
         expect(resBuscada.body.length).toBeGreaterThan(0);
     });

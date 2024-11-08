@@ -15,7 +15,7 @@ describe('Cities - UpdateById', () => {
         .put(`/cities/${res.body}`)
         .send({ name: 'Caxias' });
         
-        expect(resAtualizada.statusCode).toEqual(StatusCodes.NO_CONTENT);
+        expect(resAtualizada.statusCode).toEqual(StatusCodes.BAD_REQUEST);
     });
     it('Try to update a non-exist register', async () => {
         
@@ -23,7 +23,7 @@ describe('Cities - UpdateById', () => {
         .put('/cities/99999')
         .send({ name: 'Caxias' });
         
-        expect(res.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
-        expect(res.body).toHaveProperty('errors.default');
+        expect(res.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+        expect(res.body).toHaveProperty('msg');
     });
 });

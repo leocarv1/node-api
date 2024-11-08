@@ -96,6 +96,8 @@ export class CityController {
     static getById = async (req: Request<IParamsProps>, res: Response) => {
         try {
             const city = await City.findByPk(req.params.id)
+            
+            if (!city) return res.status(StatusCodes.BAD_REQUEST).json({msg: `City not found`});
     
             return res.status(StatusCodes.OK).json(city);
         } catch (err) {

@@ -12,7 +12,9 @@ if (process.env.NODE_ENV === 'production') {
     connect = new Sequelize(db.configPrd);
 } else if (process.env.NODE_ENV === 'development') {
     connect = new Sequelize(db.configDev);
-} else {
+} else if (process.env.NODE_ENV === 'test') {
+    connect = new Sequelize(db.configDev);
+}else {
     throw new Error('NODE_ENV não está definido corretamente. Use "production" ou "development".');
 }
 

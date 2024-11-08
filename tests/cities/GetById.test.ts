@@ -12,7 +12,7 @@ describe('Cities - GetById', () => {
         expect(res.statusCode).toEqual(StatusCodes.CREATED);
         
         const resBuscada = await testServer
-        .get(`/cities/${res.body}`)
+        .get(`/cities/${res.body.id}`)
         .send();
         
         expect(resBuscada.statusCode).toEqual(StatusCodes.OK);
@@ -24,7 +24,7 @@ describe('Cities - GetById', () => {
         .get('/cities/99999')
         .send();
         
-        expect(res.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+        expect(res.statusCode).toEqual(StatusCodes.BAD_REQUEST);
         expect(res.body).toHaveProperty('errors.default');
     });
 });
