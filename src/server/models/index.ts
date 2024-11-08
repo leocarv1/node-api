@@ -1,4 +1,4 @@
-import connect from '../database'; // Importa a conexão com o banco de dados
+import connect from '../database'; 
 import City from './City';
 import User from './User';
 

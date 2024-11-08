@@ -5,6 +5,8 @@ import { IUser } from '../interfaces/IUser';
 import City from './City';
 import { ETables } from '../enums/ETables';
 
+import * as bycrypt from 'bcryptjs';
+
 type UserCreationAttributes = Optional<IUser, 'id'>
 
 class User extends Model<IUser, UserCreationAttributes> implements IUser {
@@ -12,12 +14,18 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
     public fullName!: string;
     public email!: string;
     public cityId!: number;
+    public password!: string;
 
     public readonly city?: City;
 
     public static associations: {
         city: Association<User, City>;
     };
+
+    static async encrypt(value: string): Promise<string> {
+        const hash = await bycrypt.hash(value, 12);
+        return hash;
+    }
 
     static initModel(sequelize: Sequelize) {
         User.init(
@@ -37,17 +45,30 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
                 },
                 cityId: {
                     type: DataTypes.INTEGER,
+                    allowNull: false
+                },
+                password: {
+                    type: DataTypes.STRING,
                     allowNull: false,
-                    get() {
-                        this.getDataValue('cityId');
-                    }
                 }
             },
             {
                 sequelize,
                 tableName: ETables.users,
                 timestamps: true, 
-                underscored: true, 
+                underscored: true,
+                hooks: {
+                    beforeCreate: async (user) => {
+                        if (user.password) {
+                            user.password = await User.encrypt(user.password);
+                        }
+                    },
+                    beforeUpdate: async (user) => {
+                        if (user.changed('password')) {
+                            user.password = await User.encrypt(user.password);
+                        }
+                    }
+                }
             }
         )
     }

@@ -30,6 +30,7 @@ export class UserController {
             fullName: yup.string().required().max(150),
             email: yup.string().required().max(150),
             cityId: yup.number().required().max(15),
+            password: yup.string().required()
         })),
         query: getSchema<IFilter>(yup.object().shape({
             filter: yup.string().min(3),
@@ -38,12 +39,13 @@ export class UserController {
 
     static async create(req: Request<{}, {}, IBodyProps>, res: Response) {
         try {
-            const {fullName, email, cityId} = req.body;
+            const {fullName, email, cityId, password} = req.body;
 
             const user = await User.create({
                 fullName: fullName,
                 email: email,
-                cityId: cityId
+                cityId: cityId,
+                password: password
             }, {
                 include: [{
                     model: City,

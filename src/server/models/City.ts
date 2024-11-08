@@ -2,7 +2,7 @@ import { Association, DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import connect from '../database';
 
 import { ICity } from '../interfaces/ICity';
-import User from './User';
+import { User } from '.';
 import { ETables } from '../enums/ETables';
 
 type CityCreationAttributes = Optional<ICity, 'id'>
