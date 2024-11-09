@@ -39,18 +39,11 @@ export class UserController {
 
     static async create(req: Request<{}, {}, IBodyProps>, res: Response) {
         try {
-            const {fullName, email, cityId, password} = req.body;
-
-            const user = await User.create({
-                fullName: fullName,
-                email: email,
-                cityId: cityId,
-                password: password
-            }, {
+            const user = await User.create(req.body, {
                 include: [{
                     model: City,
                     as: 'city',
-                    where: { id: cityId }
+                    where: { id: req.body.cityId }
                 }]
             });
 
@@ -112,6 +105,8 @@ export class UserController {
 
     static getById = async (req: Request<IParamsProps>, res: Response) => {
         try {
+            console.log("header" + req);
+
             const user = await User.findByPk(req.params.id, { include: 'city' })
     
             return res.status(StatusCodes.OK).json(user);

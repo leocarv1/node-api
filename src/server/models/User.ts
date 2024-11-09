@@ -5,7 +5,7 @@ import { IUser } from '../interfaces/IUser';
 import City from './City';
 import { ETables } from '../enums/ETables';
 
-import * as bycrypt from 'bcryptjs';
+import { Authentication } from '../shared/services/Authentication';
 
 type UserCreationAttributes = Optional<IUser, 'id'>
 
@@ -21,11 +21,6 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
     public static associations: {
         city: Association<User, City>;
     };
-
-    static async encrypt(value: string): Promise<string> {
-        const hash = await bycrypt.hash(value, 12);
-        return hash;
-    }
 
     static initModel(sequelize: Sequelize) {
         User.init(
@@ -60,12 +55,12 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
                 hooks: {
                     beforeCreate: async (user) => {
                         if (user.password) {
-                            user.password = await User.encrypt(user.password);
+                            user.password = await Authentication.hashPassword(user.password);
                         }
                     },
                     beforeUpdate: async (user) => {
                         if (user.changed('password')) {
-                            user.password = await User.encrypt(user.password);
+                            user.password = await Authentication.hashPassword(user.password);
                         }
                     }
                 }
