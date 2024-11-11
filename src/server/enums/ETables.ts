@@ -1,4 +1,6 @@
 export enum ETables {
     cities = 'cities',
-    users = 'users'
+    users = 'users',
+    apartments = 'apartments',
+    clients = 'clients'
 }
