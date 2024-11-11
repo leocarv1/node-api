@@ -30,6 +30,8 @@ export class ReservationController {
             apartment_id: yup.number().required().max(15),
             client_id: yup.number().required().max(15),
             days: yup.number().required().max(15),
+            active: yup.bool().required(),
+            date_initial: yup.date().required()
         })),
         query: getSchema<IFilter>(yup.object().shape({
             filter: yup.string().min(3),
@@ -130,6 +132,8 @@ export class ReservationController {
             apartment_id: yup.number().required().max(15),
             client_id: yup.number().required().max(15),
             days: yup.number().required().max(15),
+            active: yup.bool().required(),
+            date_initial: yup.date().required()
         })),
         params: getSchema<IParamsProps>(yup.object().shape({
             id: yup.number().integer().required().moreThan(0)

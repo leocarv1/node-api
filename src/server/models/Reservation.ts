@@ -12,6 +12,8 @@ class Reservation extends Model<IReservation, ReservationCreationAttributes> imp
     public apartment_id!: number;
     public client_id!: number;
     public days!: number;
+    public active!: boolean;
+    public date_initial!: Date
 
     static initModel(sequelize: Sequelize) {
         Reservation.init(
@@ -32,6 +34,14 @@ class Reservation extends Model<IReservation, ReservationCreationAttributes> imp
                 days: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
+                },
+                active: {
+                    type: DataTypes.BOOLEAN,
+                    allowNull: false
+                },
+                date_initial: {
+                    type: DataTypes.DATE,
+                    allowNull: false
                 }
             },
             {
