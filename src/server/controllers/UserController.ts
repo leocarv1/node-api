@@ -27,9 +27,9 @@ export class UserController {
     // Create
     static createValidation = validation((getSchema) => ({
         body: getSchema<IBodyProps>(yup.object().shape({
-            fullName: yup.string().required().max(150),
+            full_name: yup.string().required().max(150),
             email: yup.string().required().max(150),
-            cityId: yup.number().required().max(15),
+            city_id: yup.number().required().max(15),
             password: yup.string().required()
         })),
         query: getSchema<IFilter>(yup.object().shape({
@@ -43,7 +43,7 @@ export class UserController {
                 include: [{
                     model: City,
                     as: 'city',
-                    where: { id: req.body.cityId }
+                    where: { id: req.body.city_id }
                 }]
             });
 
@@ -74,7 +74,7 @@ export class UserController {
                 where: {
                     [Op.or]: [
                         {
-                            fullName: {
+                            full_name: {
                                 [Op.like]: `%${filter}%`
                             }
                         },
@@ -119,9 +119,9 @@ export class UserController {
     // Update
     static updateByIdIdValidation = validation((getSchema) => ({
         body: getSchema<IBodyProps>(yup.object().shape({
-            fullName: yup.string().required().min(150),
+            full_name: yup.string().required().min(150),
             email: yup.string().required().min(150),
-            cityId: yup.number().required().min(150),
+            city_id: yup.number().required().min(150),
         })),
         params: getSchema<IParamsProps>(yup.object().shape({
             id: yup.number().integer().required().moreThan(0)
@@ -133,9 +133,9 @@ export class UserController {
     
         if (user) {
             user.update({
-                fullName: req.body.name,
+                full_name: req.body.name,
                 email: req.body.email,
-                cityId: req.body.cityId
+                city_id: req.body.city_id
             });
             return res.status(StatusCodes.OK).json({msg: "User updated succefully!"})
         } else {

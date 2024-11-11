@@ -11,9 +11,9 @@ type UserCreationAttributes = Optional<IUser, 'id'>
 
 class User extends Model<IUser, UserCreationAttributes> implements IUser {
     public id!: number;
-    public fullName!: string;
+    public full_name!: string;
     public email!: string;
-    public cityId!: number;
+    public city_id!: number;
     public password!: string;
 
     public readonly city?: City;
@@ -30,7 +30,7 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
                     autoIncrement: true,
                     primaryKey: true,
                 },
-                fullName: {
+                full_name: {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
@@ -38,7 +38,7 @@ class User extends Model<IUser, UserCreationAttributes> implements IUser {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-                cityId: {
+                city_id: {
                     type: DataTypes.INTEGER,
                     allowNull: false
                 },
