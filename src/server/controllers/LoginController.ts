@@ -18,15 +18,15 @@ interface IParamsProps {
 
 interface IBodyProps extends Omit<IUser, 'id'> {}
 
-interface IBodyPropsSingIn extends Omit<IUser, 'id' | 'fullName' | 'cityId'> {}
+interface IBodyPropsSingIn extends Omit<IUser, 'id' | 'full_name' | 'city_id'> {}
 
 export class LoginController {
     
     static singUpValidation = validation((getSchema) => ({
         body: getSchema<IBodyProps>(yup.object().shape({
-            fullName: yup.string().required().min(3),
+            full_name: yup.string().required().min(3),
             email: yup.string().required().min(3),
-            cityId: yup.number().required().max(15),
+            city_id: yup.number().required().max(15),
             password: yup.string().required().min(3)
         }))
     }));
@@ -37,7 +37,7 @@ export class LoginController {
                 include: [{
                     model: City,
                     as: 'city',
-                    where: { id: req.body.cityId }
+                    where: { id: req.body.city_id }
                 }]
             });
 
