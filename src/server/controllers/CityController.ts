@@ -2,15 +2,16 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
-import { validation } from '../../shared/middlewares';
-import City from '../../models/City';
+import { validation } from '../shared/middlewares';
+import { City } from '../models';
 
 // Interfaces
-import { ICity } from '../../interfaces/ICity';
-import { IFilter } from '../../interfaces/IFilter';
+import { ICity } from '../interfaces/ICity';
+import { IFilter } from '../interfaces/IFilter';
 
-import { CityService } from '../../services/cities/CityService';
-import { ICityService } from '../../services/cities/CityService';
+import { CityService } from '../services/cities/CityService';
+import { ICityService } from '../services/cities/CityService';
+import { Op } from 'sequelize';
 
 interface IParamsProps {
     id?: number;
@@ -19,6 +20,7 @@ interface IParamsProps {
 interface IBodyProps extends Omit<ICity, 'id'> {}
 
 interface IQueryProps {
+    id?: number,
     page?: number;
     limit?: number;
     filter?: string
@@ -57,12 +59,26 @@ export class CityController {
             page: yup.number().moreThan(0),
             limit: yup.number().moreThan(0),
             filter: yup.string(),
+            id: yup.number().integer().default(0),
         })),
     }));
     
     static getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
         try {
-            const cities = await City.findAll();
+            const page = req.query.page || 1;
+            const limit = req.query.limit || 10;
+            const filter = req.query.filter || '';
+    
+            const cities = await City.findAll({
+                where: {
+                    name: {
+                        [Op.like]: `%${filter}%`
+                    }
+                },
+                offset: (page - 1) * limit,
+                limit: limit 
+            });
+
             return res.status(StatusCodes.OK).json(cities);
         } catch (err) {
             console.log(err)
@@ -80,6 +96,8 @@ export class CityController {
     static getById = async (req: Request<IParamsProps>, res: Response) => {
         try {
             const city = await City.findByPk(req.params.id)
+            
+            if (!city) return res.status(StatusCodes.BAD_REQUEST).json({msg: `City not found`});
     
             return res.status(StatusCodes.OK).json(city);
         } catch (err) {

@@ -16,7 +16,7 @@ describe('Cities - DeleteById', () => {
         .delete(`/cities/${res.body}`)
         .send();
         
-        expect(resApagada.statusCode).toEqual(StatusCodes.NO_CONTENT);
+        expect(resApagada.statusCode).toEqual(StatusCodes.OK);
     });
     it('Try to delete a register that not exists', async () => {
         
@@ -24,7 +24,7 @@ describe('Cities - DeleteById', () => {
         .delete('/cities/99999')
         .send();
         
-        expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
+        expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
         expect(res1.body).toHaveProperty('errors.default');
     });
 });

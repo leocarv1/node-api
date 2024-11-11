@@ -1,37 +1,37 @@
 import { Association, DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import connect from '../database';
 
-import { ICity } from '../interfaces/ICity';
+import { IApartment } from '../interfaces/IApartment';
 import { User } from '.';
 import { ETables } from '../enums/ETables';
 
-type CityCreationAttributes = Optional<ICity, 'id'>
+type ApartmentCreationAttributes = Optional<IApartment, 'id'>
 
-class City extends Model<ICity, CityCreationAttributes> implements ICity {
+class Apartment extends Model<IApartment, ApartmentCreationAttributes> implements IApartment {
     public id!: number;
-    public name!: string;
-    public readonly users?: User[];
-
-    public static associations: {
-        users: Association<City, User>;
-    };
+    public number!: number;
+    public floor!: number;
 
     static initModel(sequelize: Sequelize) {
-        City.init(
+        Apartment.init(
             {
                 id: {
                     type: DataTypes.INTEGER.UNSIGNED,
                     autoIncrement: true,
                     primaryKey: true,
                 },
-                name: {
-                    type: DataTypes.STRING,
+                number: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false,
+                },
+                floor: {
+                    type: DataTypes.INTEGER,
                     allowNull: false,
                 }
             },
             {
                 sequelize,
-                tableName: ETables.cities,
+                tableName: ETables.apartments,
                 timestamps: true, 
                 underscored: true, 
             }
@@ -39,4 +39,4 @@ class City extends Model<ICity, CityCreationAttributes> implements ICity {
     }
 }
 
-export default City;
+export default Apartment;
