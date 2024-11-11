@@ -9,7 +9,7 @@ type ClientCreationAttributes = Optional<IClient, 'id'>
 
 class Client extends Model<IClient, ClientCreationAttributes> implements IClient {
     public id!: number;
-    public fullName!: string;
+    public full_name!: string;
     public email!: string;
     public phone!: string;
     public doc!: string;
@@ -26,7 +26,7 @@ class Client extends Model<IClient, ClientCreationAttributes> implements IClient
                     autoIncrement: true,
                     primaryKey: true,
                 },
-                fullName: {
+                full_name: {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },

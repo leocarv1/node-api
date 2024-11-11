@@ -27,7 +27,7 @@ export class ClientController {
     // Create
     static createValidation = validation((getSchema) => ({
         body: getSchema<IBodyProps>(yup.object().shape({
-            fullName: yup.string().required().max(150),
+            full_name: yup.string().required().max(150),
             email: yup.string().required().max(150),
             phone: yup.string().required().max(15),
             doc: yup.string().required().max(15),
@@ -68,7 +68,7 @@ export class ClientController {
                 where: {
                     [Op.or]: [
                         {
-                            fullName: {
+                            full_name: {
                                 [Op.like]: `%${filter}%`
                             }
                         },
@@ -99,7 +99,7 @@ export class ClientController {
 
     static getById = async (req: Request<IParamsProps>, res: Response) => {
         try {
-            const client = await Client.findByPk(req.params.id);
+            const client = await Client.findByPk(req.params.id, { include: 'apartment' });
     
             return res.status(StatusCodes.OK).json(client);
         } catch (err) {
@@ -111,7 +111,7 @@ export class ClientController {
     // Update
     static updateByIdIdValidation = validation((getSchema) => ({
         body: getSchema<IBodyProps>(yup.object().shape({
-            fullName: yup.string().required().max(150),
+            full_name: yup.string().required().max(150),
             email: yup.string().required().max(150),
             phone: yup.string().required().max(15),
             doc: yup.string().required().max(15),
