@@ -4,6 +4,7 @@ import connect from '../database';
 import { IClient } from '../interfaces/IClient';
 import City from './City';
 import { ETables } from '../enums/ETables';
+import Reservation from './Reservation';
 
 type ClientCreationAttributes = Optional<IClient, 'id'>
 
@@ -14,8 +15,10 @@ class Client extends Model<IClient, ClientCreationAttributes> implements IClient
     public phone!: string;
     public doc!: string;
 
+    public readonly reservation?: Reservation;
+
     public static associations: {
-        city: Association<Client, City>;
+        reservation: Association<Client, Reservation>;
     };
 
     static initModel(sequelize: Sequelize) {

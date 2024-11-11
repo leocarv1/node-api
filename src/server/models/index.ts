@@ -19,5 +19,7 @@ User.belongsTo(City, { foreignKey: 'city_id', as: 'city' });
 Reservation.belongsTo(Client, { foreignKey: 'client_id', as: 'client' });
 Reservation.hasMany(Apartment, { foreignKey: 'apartment_id', as: 'apartment' });
 
+Client.hasMany(Reservation, { foreignKey: 'client_id', as: 'reservations' });
+
 // Exporta os modelos para uso no resto da aplicação
 export { City, User, Apartment, Client, Reservation };

@@ -99,7 +99,7 @@ export class ClientController {
 
     static getById = async (req: Request<IParamsProps>, res: Response) => {
         try {
-            const client = await Client.findByPk(req.params.id, { include: 'apartment' });
+            const client = await Client.findByPk(req.params.id, { include: ['reservations'] });
     
             return res.status(StatusCodes.OK).json(client);
         } catch (err) {
