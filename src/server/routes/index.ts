@@ -7,10 +7,11 @@ import { CityController } from '../controllers/CityController';
 import { UserController } from '../controllers/UserController';
 import { ApartmentController } from '../controllers/ApartmentController';
 import LoginController from '../controllers/LoginController';
+import { ClientController } from '../controllers/ClientController';
+import { ReservationController } from '../controllers/ReservationController';
 
 // Service
 import { ensureAuth } from '../shared/middlewares/EnsureAuth';
-import { ClientController } from '../controllers/ClientController';
 
 const router = Router();
 
@@ -42,8 +43,15 @@ router.post('/auth/users', ensureAuth, UserController.createValidation, UserCont
 router.put('/auth/users/:id', ensureAuth, UserController.updateByIdIdValidation, UserController.updateById);
 router.delete('/auth/users/:id', ensureAuth, UserController.deleteByIdIdValidation, UserController.deleteById);
 
+// Reservation
+router.get('/auth/reservations', ensureAuth, ReservationController.getAllValidation, ReservationController.getAll);
+router.get('/auth/reservations/:id', ensureAuth, ReservationController.getByIdValidation, ReservationController.getById);
+router.post('/auth/reservations', ensureAuth, ReservationController.createValidation, ReservationController.create);
+router.put('/auth/reservations/:id', ensureAuth, ReservationController.updateByIdIdValidation, ReservationController.updateById);
+router.delete('/auth/reservations/:id', ensureAuth, ReservationController.deleteByIdIdValidation, ReservationController.deleteById);
+
 // Login
-router.post('/subscribe', LoginController.singUpValidation, LoginController.singIn);
+router.post('/subscribe', LoginController.singUpValidation, LoginController.singUp);
 router.post('/login', LoginController.singInValidation, LoginController.singIn);
 
 // Products
