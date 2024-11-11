@@ -1,4 +1,4 @@
-import { Association, DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { Association, DataTypes, Model, Op, Optional, Sequelize } from 'sequelize';
 import connect from '../database';
 
 import { IReservation } from '../interfaces/IReservation';
@@ -14,6 +14,7 @@ class Reservation extends Model<IReservation, ReservationCreationAttributes> imp
     public days!: number;
     public active!: boolean;
     public date_initial!: Date
+    public date_final!: Date
 
     static initModel(sequelize: Sequelize) {
         Reservation.init(
@@ -42,15 +43,55 @@ class Reservation extends Model<IReservation, ReservationCreationAttributes> imp
                 date_initial: {
                     type: DataTypes.DATE,
                     allowNull: false
-                }
+                },
+                date_final: {   
+                    type: DataTypes.DATE,
+                    allowNull: false,
+                },
             },
             {
                 sequelize,
                 tableName: ETables.reservations,
                 timestamps: true, 
                 underscored: true, 
+                hooks: {
+                    beforeValidate: (reservation: Reservation) => {
+                        reservation.date_final = reservation.calcFinalDate();
+                    },
+                    beforeUpdate: (reservation: Reservation) => {
+                        reservation.date_final = reservation.calcFinalDate();
+                    }
+                }
             }
         )
+    }
+
+    public calcFinalDate() {
+        const date = new Date(this.date_initial);
+        date.setDate(date.getDate() + this.days);
+        return date;
+    }
+
+    static async verifyReservation(apartment_id: number, date_initial: Date ): Promise<boolean> {
+        try {
+            const existingReservation = await Reservation.findOne({
+                where: {
+                    apartment_id,
+                    active: true,
+                    date_initial: {
+                        [Op.lte]: date_initial,
+                    },
+                    date_final: {
+                        [Op.gte]: date_initial,
+                    }
+                },
+            });
+
+            return existingReservation !== null;
+        } catch (error) {
+            console.error("Fail to verify reservation! ", error);
+            throw error;
+        }
     }
 }
 

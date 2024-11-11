@@ -31,7 +31,7 @@ export class ReservationController {
             client_id: yup.number().required().max(15),
             days: yup.number().required().max(15),
             active: yup.bool().required(),
-            date_initial: yup.date().required()
+            date_initial: yup.date().required(),
         })),
         query: getSchema<IFilter>(yup.object().shape({
             filter: yup.string().min(3),
@@ -39,23 +39,29 @@ export class ReservationController {
     }));
 
     static async create(req: Request<{}, {}, IBodyProps>, res: Response) {
-        try {
-            const reservation = await Reservation.create(req.body, {
-                include: [{
-                    model: Apartment,
-                    as: 'apartment',
-                    where: { id: req.body.apartment_id }
-                },{
-                    model: Client,
-                    as: 'client',
-                    where: { id: req.body.client_id }
-                }]
-            });
+        const verifyReservation = await Reservation.verifyReservation(req.body.apartment_id, req.body.date_initial);
 
-            return res.status(StatusCodes.CREATED).json(reservation);
-        } catch (err) {
-            console.log(err);
-            return res.status(StatusCodes.BAD_REQUEST).json({msg: "Create new reservation failed!"});
+        if (!verifyReservation) {
+            try {
+                const reservation = await Reservation.create(req.body, {
+                    include: [{
+                        model: Apartment,
+                        as: 'apartment',
+                        where: { id: req.body.apartment_id }
+                    },{
+                        model: Client,
+                        as: 'client',
+                        where: { id: req.body.client_id }
+                    }]
+                });
+
+                return res.status(StatusCodes.CREATED).json(reservation);
+            } catch (err) {
+                console.log(err);
+                return res.status(StatusCodes.BAD_REQUEST).json({msg: "Create new reservation failed!"});
+            }
+        } else {
+            return res.status(StatusCodes.OK).json({msg: "Reservation failed! Choose another date"});
         }
     };
 
@@ -133,7 +139,7 @@ export class ReservationController {
             client_id: yup.number().required().max(15),
             days: yup.number().required().max(15),
             active: yup.bool().required(),
-            date_initial: yup.date().required()
+            date_initial: yup.date().required(),
         })),
         params: getSchema<IParamsProps>(yup.object().shape({
             id: yup.number().integer().required().moreThan(0)
@@ -144,11 +150,7 @@ export class ReservationController {
         const reservation = await Reservation.findByPk(req.params.id);
     
         if (reservation) {
-            reservation.update({
-                apartment_id: req.body.apartment_id,
-                client_id: req.body.client_id,
-                days: req.body.days
-            });
+            reservation.update(req.body);
             return res.status(StatusCodes.OK).json({msg: "Reservation updated succefully!"})
         } else {
             return res.status(StatusCodes.BAD_REQUEST).json({msg: `Reservation not found`})
@@ -166,10 +168,14 @@ export class ReservationController {
         const reservation = await Reservation.findByPk(req.params.id);
     
         if (reservation) {
-            await reservation.destroy()
-            return res.status(StatusCodes.OK).json({msg: "Reservation deleted!"})
+            await reservation.update({
+                active: false
+            });
+
+            reservation.save();
+            return res.status(StatusCodes.OK).json({msg: "Reservation caceled!"});
         } else {
-            return res.status(StatusCodes.BAD_REQUEST).json({msg: "Reservation not found!"})
+            return res.status(StatusCodes.BAD_REQUEST).json({msg: "Reservation not found!"});
         }
     };
 }
